@@ -1,0 +1,29 @@
+.header {
+  &__row {
+    justify-content: space-between;
+  }
+
+  &__column {
+    flex: 1 1 33.333%
+  }
+
+  &__title {
+    font-size: 24px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+    top: 4px;
+    left: 5px;
+  }
+
+  &__icons {
+    text-align: right;
+  }
+
+  &__input {
+    height: 35px;
+    border-radius: 5px;
+    width: 100%;
+    padding: 10px;
+  }
+}
