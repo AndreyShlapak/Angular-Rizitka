@@ -9,12 +9,21 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './components/header/header.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
+import { GalleryCardsComponent } from './components/gallery-cards/gallery-cards.component';
+import { GalleryCardComponent } from './components/gallery-card/gallery-card.component';
+import { GalleryFiltersComponent } from './components/gallery-filters/gallery-filters.component';
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    GalleryComponent,
+    GalleryCardsComponent,
+    GalleryCardComponent,
+    GalleryFiltersComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +33,8 @@ import { HeaderComponent } from './header/header.component';
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

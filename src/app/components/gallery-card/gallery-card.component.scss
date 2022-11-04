@@ -1,0 +1,15 @@
+:host {
+  padding: 5px;
+}
+
+.gallery-card {
+  max-width: 230px;
+
+  transition: all 0.5s ease 0s;
+
+  &:hover {
+    scale: 1.1;
+    z-index: 3;
+  }
+}
+
