@@ -1,1 +1,8 @@
-<p>gallery-filters works!</p>
+<form [formGroup]="form">
+  <div *ngFor="let criterionName of criterionNames" [formArrayName]="criterionName">
+    <h2 class="title">{{criterionName | titlecase}}</h2>
+    <section class="filter-criterion">
+      <mat-checkbox color="primary" *ngFor="let control of form.get(criterionName)['controls']" [formControl]="control">ASUS</mat-checkbox>
+    </section>
+  </div>
+</form>
