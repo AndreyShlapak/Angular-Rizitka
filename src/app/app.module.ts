@@ -16,6 +16,8 @@ import { GalleryCardComponent } from './components/gallery-card/gallery-card.com
 import { GalleryFiltersComponent } from './components/gallery-filters/gallery-filters.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { RegistrationFormDialogComponent } from './components/registration-form-dialog/registration-form-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -24,21 +26,23 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     GalleryComponent,
     GalleryCardsComponent,
     GalleryCardComponent,
-    GalleryFiltersComponent
+    GalleryFiltersComponent,
+    RegistrationFormDialogComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        MatInputModule,
-        FormsModule,
-        MatCardModule,
-        MatCheckboxModule,
-        ReactiveFormsModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    FormsModule,
+    MatCardModule,
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    MatDialogModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
