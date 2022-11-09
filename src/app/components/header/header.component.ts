@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {RegistrationFormDialogComponent} from "../registration-form-dialog/registration-form-dialog.component";
 
@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(RegistrationFormDialogComponent, {
-      width: '250px',
+      width: '500px',
       enterAnimationDuration,
       exitAnimationDuration,
     });

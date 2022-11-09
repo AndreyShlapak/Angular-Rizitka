@@ -1,12 +1,48 @@
-<h1 mat-dialog-title>Delete file</h1>
-<div mat-dialog-content>
-  <p>What's your favorite animal?</p>
-  <mat-form-field appearance="fill">
-    <mat-label>Favorite Animal</mat-label>
-    <input matInput [(ngModel)]="data">
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>No</button>
-  <button mat-button mat-dialog-close cdkFocusInitial>Ok</button>
-</div>
+<form [formGroup]="form">
+  <div mat-dialog-actions>
+    <button class="close-btn" mat-icon-button mat-dialog-close type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <h1 mat-dialog-title>Registration form</h1>
+  <div mat-dialog-content>
+
+    <mat-form-field appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" placeholder="Ex. Andryi">
+      <mat-error *ngIf="registrationControls.firstName.invalid">{{getErrorMessage(registrationControls.firstName)}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" placeholder="Ex. Shlapak">
+      <mat-error *ngIf="registrationControls.lastName.invalid">{{getErrorMessage(registrationControls.lastName)}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Age</mat-label>
+      <input type="number" matInput formControlName="age" placeholder="Ex. 18">
+      <mat-error *ngIf="registrationControls.age.invalid">{{getErrorMessage(registrationControls.age)}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>City</mat-label>
+      <input matInput formControlName="city" placeholder="Ex. Kyiv">
+      <mat-error *ngIf="registrationControls.city.invalid">{{getErrorMessage(registrationControls.city)}}</mat-error>
+    </mat-form-field>
+
+    <div formGroupName="skills">
+      <mat-form-field class="registration-form__input" *ngFor="let control of form.get('skills')['controls']; let inx = index"  appearance="fill">
+        <mat-label>Skill {{inx + 1 }}</mat-label>
+        <input matInput type="text" [formControlName]="inx">
+        <mat-error *ngIf="control.invalid">{{getErrorMessage(control)}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-dialog-close mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+    <button (click)="addSkill()" class="registration-form__btn" mat-raised-button color="primary" type="button">Add skill</button>
+    <button (click)="form.reset()" mat-raised-button color="primary" type="reset">Reset</button>
+  </div>
+</form>
+
