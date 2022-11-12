@@ -18,6 +18,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { RegistrationFormDialogComponent } from './components/registration-form-dialog/registration-form-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -29,20 +30,21 @@ import {MatDialogModule} from "@angular/material/dialog";
     GalleryFiltersComponent,
     RegistrationFormDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    FormsModule,
-    MatCardModule,
-    MatCheckboxModule,
-    ReactiveFormsModule,
-    MatDialogModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        FormsModule,
+        MatCardModule,
+        MatCheckboxModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatProgressSpinnerModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

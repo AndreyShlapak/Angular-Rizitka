@@ -1,7 +1,14 @@
 :host {
   flex: 0 0 80%;
 
-  display: flex;
-  flex-wrap: wrap;
-
+  div {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
+
+.mat-progress-spinner {
+  margin: 0 auto;
+}
+
+
