@@ -1,3 +1,3 @@
-<app-gallery-filters></app-gallery-filters>
+<app-gallery-filters [loading]="loading" [products]="products" (onClick)="getForm($event)"></app-gallery-filters>
 
-<app-gallery-cards></app-gallery-cards>
+<app-gallery-cards [loading]="loading" [products]="filteredProducts"></app-gallery-cards>

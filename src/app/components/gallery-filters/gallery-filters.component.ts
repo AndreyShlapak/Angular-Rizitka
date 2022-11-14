@@ -1,33 +1,72 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {ProductModel} from "../../interfaces/product.model";
 
 @Component({
   selector: 'app-gallery-filters',
   templateUrl: './gallery-filters.component.html',
   styleUrls: ['./gallery-filters.component.scss'],
 })
-export class GalleryFiltersComponent implements OnInit {
-  form: FormGroup = new FormGroup({
-    brand: new FormArray([]),
-    cpu: new FormArray([]),
-    memory: new FormArray([]),
-  });
+export class GalleryFiltersComponent implements OnInit, OnChanges {
+  @Input() products: ProductModel[];
+  @Input() loading: boolean;
 
-  criterionNames: string[] = Object.keys(this.form.controls);
+  @Output() onClick = new EventEmitter();
 
-  private readonly CONTROL_AMOUNT = 20;
+  criterions;
+  data;
 
-  ngOnInit(): void {
-    this.generateControls();
+  form: FormGroup = new FormGroup({});
+
+  private getUniqueNamesOfCriterion(): string[]  {
+    const fn = (previousValue, currentValue) => {
+      previousValue.push(...Object.keys(currentValue.criterion));
+      return previousValue;
+    };
+    const criterionWithDublicate = this.products.reduce(fn, []);
+
+    return [...new Set(criterionWithDublicate)] as string[];
   }
 
-  private generateControls(): void {
-    for (const controlName of this.criterionNames) {
-      for (let i = 0; i < this.CONTROL_AMOUNT; i++) {
-        const control: FormControl = new FormControl<boolean>(false);
+  private getUniqueValuesOfCriterion() {
+    const obj = {};
 
-        (this.form.get(controlName) as FormArray).push(control);
+    for (let criterion of this.criterions) {
+      obj[criterion] = new Set();
+
+      for (let product of this.products) {
+        obj[criterion].add(product.criterion[criterion]);
       }
+
+      obj[criterion] = [...obj[criterion]].filter(Boolean);
+
     }
+    return obj;
+  }
+
+  private generateCriterion() {
+    return this.criterions.reduce((controls, control, index) => {
+      const innerControls = {};
+
+      for (let value of this.data[control]) {
+        innerControls[value] = new FormControl(false);
+      }
+
+      controls[control] = new FormGroup(innerControls)
+      return controls;
+    }, {})
+  }
+
+  ngOnChanges(): void {
+    if (this.loading) return;
+
+    this.criterions = this.getUniqueNamesOfCriterion();
+    this.data = this.getUniqueValuesOfCriterion();
+    this.form = new FormGroup(this.generateCriterion());
+
+  }
+
+  ngOnInit(): void {
+
   }
 }

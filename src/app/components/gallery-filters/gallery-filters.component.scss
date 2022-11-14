@@ -2,8 +2,16 @@
   flex: 0 0 20%;
 
   .filter-criterion {
-    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    max-height: 300px;
     overflow: auto;
+
+    mat-checkbox {
+      flex-shrink: 0;
+    }
   }
 }
 
