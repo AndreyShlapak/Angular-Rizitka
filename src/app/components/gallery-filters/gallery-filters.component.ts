@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {ProductModel} from "../../interfaces/product.model";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-gallery-filters',
@@ -13,57 +14,70 @@ export class GalleryFiltersComponent implements OnInit, OnChanges {
 
   @Output() onClick = new EventEmitter();
 
-  criterions;
-  data;
+  uniqueDetailsNamesOfProducts: string[];
+  mapOfProducts;
 
   form: FormGroup = new FormGroup({});
 
-  private getUniqueNamesOfCriterion(): string[]  {
-    const fn = (previousValue, currentValue) => {
-      previousValue.push(...Object.keys(currentValue.criterion));
-      return previousValue;
+  private getUniqueDetailsNamesOfProducts(): string[]  {
+
+    const gainDetailsNamesOfProducts = (detailsNamesOfProducts: string[], product: ProductModel) => {
+      const detailsNamesOfProduct = Object.keys(product.details);
+
+      detailsNamesOfProducts.push(...detailsNamesOfProduct);
+
+      return detailsNamesOfProducts;
     };
-    const criterionWithDublicate = this.products.reduce(fn, []);
 
-    return [...new Set(criterionWithDublicate)] as string[];
+    const detailsNamesOfProducts = this.products.reduce(gainDetailsNamesOfProducts, []);
+
+    return [...new Set(detailsNamesOfProducts)];
   }
 
-  private getUniqueValuesOfCriterion() {
-    const obj = {};
+  private getMapOfProducts() : Map<string, Set<string> > {
+    const gainProductsDetailsMap = (productsDetailsMap, detailsNameOfProducts) => {
 
-    for (let criterion of this.criterions) {
-      obj[criterion] = new Set();
+      const gainNamesOfSubDetails = (namesOfSubDetails, product: ProductModel) => {
+        namesOfSubDetails.add(product.details[detailsNameOfProducts]);
 
-      for (let product of this.products) {
-        obj[criterion].add(product.criterion[criterion]);
+        return namesOfSubDetails;
       }
+      const namesOfSubDetails = this.products.reduce(gainNamesOfSubDetails, new Set());
 
-      obj[criterion] = [...obj[criterion]].filter(Boolean);
+      productsDetailsMap.set(detailsNameOfProducts, namesOfSubDetails);
 
+      return productsDetailsMap;
     }
-    return obj;
+
+    return this.uniqueDetailsNamesOfProducts.reduce(gainProductsDetailsMap, new Map());
   }
 
-  private generateCriterion() {
-    return this.criterions.reduce((controls, control, index) => {
-      const innerControls = {};
+  private generateFormOfDetails() : FormGroup {
+    const gainDetailControl = (group: FormGroup, controlName: string) => {
+      group.addControl(controlName, new FormControl(false));
 
-      for (let value of this.data[control]) {
-        innerControls[value] = new FormControl(false);
-      }
+      return group;
+    }
+    const gainFormOfDetails = (form: FormGroup, formControlName: string) => {
 
-      controls[control] = new FormGroup(innerControls)
-      return controls;
-    }, {})
+      const formControl = [...this.mapOfProducts
+        .get(formControlName)]
+        .reduce(gainDetailControl, new FormGroup({}));
+
+      form.addControl(formControlName, formControl);
+
+      return form;
+    };
+
+    return this.uniqueDetailsNamesOfProducts.reduce(gainFormOfDetails, new FormGroup({}))
   }
 
   ngOnChanges(): void {
     if (this.loading) return;
 
-    this.criterions = this.getUniqueNamesOfCriterion();
-    this.data = this.getUniqueValuesOfCriterion();
-    this.form = new FormGroup(this.generateCriterion());
-
+    this.uniqueDetailsNamesOfProducts = this.getUniqueDetailsNamesOfProducts();
+    this.mapOfProducts = this.getMapOfProducts();
+    this.form = this.generateFormOfDetails();
   }
 
   ngOnInit(): void {

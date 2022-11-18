@@ -46,7 +46,7 @@ export class GalleryComponent implements OnInit {
       this.filteredProducts = this.products.filter((item) => {
         for (let [key, value] of Object.entries(obj)) {
 
-          if (item.criterion[key] !== undefined && (<string[]>value).includes(item.criterion[key].toString())) {
+          if (item.details[key] !== undefined && (<string[]>value).includes(item.details[key].toString())) {
             return true;
           }
         }

@@ -1,11 +1,11 @@
 <form [formGroup]="form">
-  <div *ngFor="let criterionName of criterions" [formArrayName]="criterionName">
-    <h2 class="title">{{criterionName | titlecase}}</h2>
+  <div *ngFor="let detailsName of uniqueDetailsNamesOfProducts" [formArrayName]="detailsName">
+    <h2 class="title">{{detailsName | titlecase}}</h2>
     <section class="filter-criterion">
       <mat-checkbox color="primary"
                     (input)="onClick.emit(form)"
-                    *ngFor="let controlName of data[criterionName]"
-                    [formControl]="form.get(criterionName)['controls'][controlName]"
+                    *ngFor="let controlName of mapOfProducts.get(detailsName)"
+                    [formControl]="form.get(detailsName)['controls'][controlName]"
       >{{controlName}}</mat-checkbox>
     </section>
   </div>
