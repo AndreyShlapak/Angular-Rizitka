@@ -1,3 +1,15 @@
-<app-gallery-filters [loading]="loading" [products]="products" (onClick)="getForm($event)"></app-gallery-filters>
+<ng-container *ngIf="loading;else loader">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate">
+  </mat-progress-spinner>
+</ng-container>
 
-<app-gallery-cards [loading]="loading" [products]="filteredProducts"></app-gallery-cards>
+<ng-template #loader>
+  <app-gallery-filters [products]="products" (filtersChanged)="onFiltersChange($event)"></app-gallery-filters>
+  <app-gallery-cards [products]="filteredProducts"></app-gallery-cards>
+</ng-template>
+
+
+
+

@@ -8,7 +8,6 @@ import {ProductModel} from "../../interfaces/product.model";
 })
 export class GalleryCardsComponent implements OnInit {
   @Input() products: ProductModel[];
-  @Input() loading: boolean;
 
   ngOnInit(): void {
 

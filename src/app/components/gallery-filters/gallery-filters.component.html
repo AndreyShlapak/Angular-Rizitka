@@ -3,7 +3,7 @@
     <h2 class="title">{{detailsName | titlecase}}</h2>
     <section class="filter-criterion">
       <mat-checkbox color="primary"
-                    (input)="onClick.emit(form)"
+                    (input)="filtersChanged.emit(form)"
                     *ngFor="let controlName of mapOfProducts.get(detailsName)"
                     [formControl]="form.get(detailsName)['controls'][controlName]"
       >{{controlName}}</mat-checkbox>

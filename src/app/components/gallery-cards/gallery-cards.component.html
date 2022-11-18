@@ -1,16 +1,5 @@
-<div *ngIf="loading; else loadingBlock">
-  <mat-progress-spinner
-    color="primary"
-    mode="indeterminate">
-  </mat-progress-spinner>
-</div>
-
-<ng-template #loadingBlock>
-  <div>
-    <app-gallery-card
-      *ngFor="let product of products"
-      [product]="product"
-    ></app-gallery-card>
-  </div>
-</ng-template>
+<app-gallery-card
+  *ngFor="let product of products"
+  [product]="product"
+></app-gallery-card>
 

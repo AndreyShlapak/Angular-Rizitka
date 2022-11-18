@@ -1,21 +1,29 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup} from "@angular/forms";
 import {ProductModel} from "../../interfaces/product.model";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-gallery-filters',
   templateUrl: './gallery-filters.component.html',
   styleUrls: ['./gallery-filters.component.scss'],
 })
-export class GalleryFiltersComponent implements OnInit, OnChanges {
-  @Input() products: ProductModel[];
-  @Input() loading: boolean;
+export class GalleryFiltersComponent {
+  private _products: ProductModel[];
+  @Input()
+  public set products(values: ProductModel[]) {
+    this._products = values;
+    this.uniqueDetailsNamesOfProducts = this.getUniqueDetailsNamesOfProducts();
+    this.mapOfProducts = this.getMapOfProducts();
+    this.form = this.generateFormOfDetails();
+  }
+  public get products() {
+    return this._products;
+  }
 
-  @Output() onClick = new EventEmitter();
+  @Output() filtersChanged = new EventEmitter();
 
   uniqueDetailsNamesOfProducts: string[];
-  mapOfProducts;
+  mapOfProducts: Map<string, Set<string> >;
 
   form: FormGroup = new FormGroup({});
 
@@ -34,13 +42,13 @@ export class GalleryFiltersComponent implements OnInit, OnChanges {
     return [...new Set(detailsNamesOfProducts)];
   }
 
-  private getMapOfProducts() : Map<string, Set<string> > {
+  private getMapOfProducts() : Map<string, Set<string>> {
     const gainProductsDetailsMap = (productsDetailsMap, detailsNameOfProducts) => {
 
-      const gainNamesOfSubDetails = (namesOfSubDetails, product: ProductModel) => {
-        namesOfSubDetails.add(product.details[detailsNameOfProducts]);
+      const gainNamesOfSubDetails = (namesOfSubDetails, product: ProductModel) : Set<string> => {
+        const productDetail = product.details[detailsNameOfProducts];
 
-        return namesOfSubDetails;
+        return productDetail === undefined ? namesOfSubDetails : namesOfSubDetails.add(productDetail);
       }
       const namesOfSubDetails = this.products.reduce(gainNamesOfSubDetails, new Set());
 
@@ -69,18 +77,7 @@ export class GalleryFiltersComponent implements OnInit, OnChanges {
       return form;
     };
 
-    return this.uniqueDetailsNamesOfProducts.reduce(gainFormOfDetails, new FormGroup({}))
+    return this.uniqueDetailsNamesOfProducts.reduce(gainFormOfDetails, new FormGroup({}));
   }
 
-  ngOnChanges(): void {
-    if (this.loading) return;
-
-    this.uniqueDetailsNamesOfProducts = this.getUniqueDetailsNamesOfProducts();
-    this.mapOfProducts = this.getMapOfProducts();
-    this.form = this.generateFormOfDetails();
-  }
-
-  ngOnInit(): void {
-
-  }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ProductsService} from "../../services/products.service";
 import {delay, Observable} from "rxjs";
 import {ProductModel} from "../../interfaces/product.model";
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-gallery',
@@ -14,20 +15,19 @@ export class GalleryComponent implements OnInit {
   public filteredProducts: ProductModel[];
 
   public loading: boolean = true;
-  private DELAY: number = 0;
 
   constructor(public productsService: ProductsService) { }
 
-  getProducts(): void {
+  initProducts(): void {
     this.products$ = this.productsService.getProducts();
-    this.products$.pipe(delay(this.DELAY)).subscribe(value => {
+    this.products$.subscribe(value => {
       this.products = value;
       this.filteredProducts = this.products;
       this.loading = false;
     })
   }
 
-  getForm(form) {
+  onFiltersChange(form: FormGroup) {
     const obj = {};
     let empty = true;
 
@@ -59,7 +59,7 @@ export class GalleryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getProducts();
+    this.initProducts();
   }
 
 }
