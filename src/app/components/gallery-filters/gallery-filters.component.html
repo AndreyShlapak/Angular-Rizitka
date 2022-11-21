@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <div *ngFor="let detailsName of uniqueDetailsNamesOfProducts" [formArrayName]="detailsName">
+  <div *ngFor="let detailsName of uniqueDetails" [formGroupName]="detailsName">
     <h2 class="title">{{detailsName | titlecase}}</h2>
     <section class="filter-criterion">
       <mat-checkbox color="primary"

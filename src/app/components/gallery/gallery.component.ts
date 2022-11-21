@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {ProductsService} from "../../services/products.service";
-import {delay, Observable} from "rxjs";
 import {ProductModel} from "../../interfaces/product.model";
 import {FormGroup} from "@angular/forms";
 
@@ -10,56 +9,66 @@ import {FormGroup} from "@angular/forms";
   styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent implements OnInit {
-  private products$: Observable<ProductModel[]>;
   public products: ProductModel[];
   public filteredProducts: ProductModel[];
-
   public loading: boolean = true;
+
+  private emptyFilters = true;
+  private mapOfFilteredProducts;
 
   constructor(public productsService: ProductsService) { }
 
   initProducts(): void {
-    this.products$ = this.productsService.getProducts();
-    this.products$.subscribe(value => {
+    this.productsService.getProducts().subscribe(value => {
       this.products = value;
       this.filteredProducts = this.products;
       this.loading = false;
     })
   }
 
-  onFiltersChange(form: FormGroup) {
-    const obj = {};
-    let empty = true;
+  getMapOfFilteredProducts(form: FormGroup) {
+    const fn = ([detailName, detailValue]) => {
+      const filteredMap = Object.entries(detailValue).reduce(fn2, [])
 
-    for (const [criterionKey, criterionValues] of Object.entries(form['value'])) {
-      obj[criterionKey] = []
+      return [detailName, filteredMap];
+    }
+    const fn2 = (acc : string[], v) => {
+      const [key, value] = v;
 
-      for (const [key, value] of Object.entries(criterionValues)) {
-        if (value) {
-          empty = false;
-          obj[criterionKey].push(key);
-        }
+      if (value) {
+        acc.push(key);
+        this.emptyFilters = false;
+      }
+      return acc;
+    }
+
+    return Object.entries(form.value).map(fn);
+  }
+
+  changeFilteredProducts(mapOfProducts): void {
+    if (this.emptyFilters) {
+      this.filteredProducts = this.products;
+      return;
+    }
+
+    const gainFilteredProducts = (product) => {
+      for (let [key, value] of mapOfProducts) {
+        const condition = product.details[key] !== undefined && (<string[]>value).includes(product.details[key].toString());
+
+        if (condition) return true;
       }
     }
 
-    if (!empty) {
-      this.filteredProducts = this.products.filter((item) => {
-        for (let [key, value] of Object.entries(obj)) {
+    this.filteredProducts = this.products.filter(gainFilteredProducts);
+  }
 
-          if (item.details[key] !== undefined && (<string[]>value).includes(item.details[key].toString())) {
-            return true;
-          }
-        }
-        return false;
-      })
-    }
-    else {
-      this.filteredProducts = this.products;
-    }
+  onFilterChanges(form: FormGroup) : void {
+    this.mapOfFilteredProducts = this.getMapOfFilteredProducts(form);
+    this.changeFilteredProducts(this.mapOfFilteredProducts);
+    this.emptyFilters = true;
   }
 
   ngOnInit(): void {
     this.initProducts();
   }
-
 }

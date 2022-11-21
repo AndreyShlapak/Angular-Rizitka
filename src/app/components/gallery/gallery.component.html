@@ -6,7 +6,7 @@
 </ng-container>
 
 <ng-template #loader>
-  <app-gallery-filters [products]="products" (filtersChanged)="onFiltersChange($event)"></app-gallery-filters>
+  <app-gallery-filters [products]="products" (filtersChanged)="onFilterChanges($event)"></app-gallery-filters>
   <app-gallery-cards [products]="filteredProducts"></app-gallery-cards>
 </ng-template>
 
