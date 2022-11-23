@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductsService} from "../../services/products.service";
 import {ProductModel} from "../../interfaces/product.model";
 import {FormGroup} from "@angular/forms";

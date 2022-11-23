@@ -19,6 +19,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { RegistrationFormDialogComponent } from './components/registration-form-dialog/registration-form-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import {HttpClientModule} from "@angular/common/http";
+import {InMemoryDataService} from "./services/in-memory-data.service";
 
 @NgModule({
   declarations: [
@@ -43,7 +46,11 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
         MatCheckboxModule,
         ReactiveFormsModule,
         MatDialogModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        HttpClientModule,
+        HttpClientInMemoryWebApiModule.forRoot(
+          InMemoryDataService, { dataEncapsulation: false }
+        )
     ],
   providers: [],
   bootstrap: [AppComponent]
