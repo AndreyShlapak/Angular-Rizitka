@@ -32,11 +32,11 @@ export class GalleryFiltersComponent implements OnChanges{
   }
 
   private getMapOfProducts(): Map<string, Set<string>> {
-    return this.productsService.getMapOfProducts(this.products, this.uniqueDetails);
+    return this.productsService.collectProductsDetailValuesByDetailNames(this.products, this.uniqueDetails);
   }
 
   private getDetailsForm(): FormGroup {
-    return  this.productsService.generateFormOfDetails(this.mapOfProducts, this.uniqueDetails);
+    return  this.productsService.generateFilterFormControls(this.mapOfProducts, this.uniqueDetails);
   }
 
   ngOnChanges(): void {

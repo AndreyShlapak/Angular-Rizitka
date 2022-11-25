@@ -32,7 +32,7 @@ export class ProductsService {
     return [...new Set(detailsNamesOfProducts)];
   }
 
-  public getMapOfProducts(products: ProductModel[], uniqueDetails) : Map<string, Set<string>> {
+  public collectProductsDetailValuesByDetailNames(products: ProductModel[], uniqueDetailNames: string[]) : Map<string, Set<string>> {
     const gainProductsDetailsMap = (productsDetailsMap, detailsNameOfProducts) => {
 
       const gainNamesOfSubDetails = (namesOfSubDetails, product: ProductModel) : Set<string> => {
@@ -47,10 +47,10 @@ export class ProductsService {
       return productsDetailsMap;
     }
 
-    return uniqueDetails.reduce(gainProductsDetailsMap, new Map());
+    return uniqueDetailNames.reduce(gainProductsDetailsMap, new Map());
   }
 
-  public generateFormOfDetails(mapOfProducts: Map<string, Set<string>>, uniqueDetails: string[]) : FormGroup {
+  public generateFilterFormControls(productFieldNamesToValues: Map<string, Set<string>>, uniqueDetails: string[]) : FormGroup {
     const gainDetailControl = (group: FormGroup, controlName: string) => {
       group.addControl(controlName, new FormControl(false));
 
@@ -58,7 +58,7 @@ export class ProductsService {
     }
     const gainFormOfDetails = (form: FormGroup, formControlName: string) => {
 
-      const formControl = [...mapOfProducts
+      const formControl = [...productFieldNamesToValues
         .get(formControlName)]
         .reduce(gainDetailControl, new FormGroup({}));
 

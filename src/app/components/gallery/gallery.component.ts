@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductsService} from "../../services/products.service";
-import {ProductModel} from "../../interfaces/product.model";
+import {FilteredDetailOfProduct, ProductModel} from "../../interfaces/product.model";
 import {FormGroup} from "@angular/forms";
 
 @Component({
@@ -13,8 +13,8 @@ export class GalleryComponent implements OnInit {
   public filteredProducts: ProductModel[];
   public loading: boolean = true;
 
-  private emptyFilters = true;
-  private mapOfFilteredProducts;
+  private emptyFilters: boolean = true;
+  private mapOfFilteredProducts: FilteredDetailOfProduct[];
 
   constructor(public productsService: ProductsService) { }
 
@@ -26,20 +26,20 @@ export class GalleryComponent implements OnInit {
     })
   }
 
-  getMapOfFilteredProducts(form: FormGroup) {
-    const fn = ([detailName, detailValue]) => {
-      const filteredMap = Object.entries(detailValue).reduce(fn2, [])
+  getMapOfFilteredProducts(form: FormGroup) : FilteredDetailOfProduct[] {
+    const fn = ([detailName, detailValue]) : FilteredDetailOfProduct => {
+      const filteredMap = [];
+
+      Object.entries(detailValue).forEach((item) => {
+        const [key, value] = item;
+
+        if (value) {
+          filteredMap.push(key);
+          this.emptyFilters = false;
+        }
+      });
 
       return [detailName, filteredMap];
-    }
-    const fn2 = (acc : string[], v) => {
-      const [key, value] = v;
-
-      if (value) {
-        acc.push(key);
-        this.emptyFilters = false;
-      }
-      return acc;
     }
 
     return Object.entries(form.value).map(fn);
@@ -51,7 +51,7 @@ export class GalleryComponent implements OnInit {
       return;
     }
 
-    const gainFilteredProducts = (product) => {
+    const checkByFieldOrTypeCondition  = (product) => {
       for (let [key, value] of mapOfProducts) {
         const condition = product.details[key] !== undefined && (<string[]>value).includes(product.details[key].toString());
 
@@ -59,7 +59,7 @@ export class GalleryComponent implements OnInit {
       }
     }
 
-    this.filteredProducts = this.products.filter(gainFilteredProducts);
+    this.filteredProducts = this.products.filter(checkByFieldOrTypeCondition );
   }
 
   onFilterChanges(form: FormGroup) : void {

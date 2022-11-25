@@ -4,3 +4,7 @@ export interface ProductModel {
   price: number,
   details
 }
+
+export interface FilteredDetailOfProduct {
+  [index: number]: [string, string[]];
+}

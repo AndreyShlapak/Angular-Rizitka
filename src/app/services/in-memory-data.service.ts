@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {InMemoryDbService} from "angular-in-memory-web-api";
+import {ProductModel} from "../interfaces/product.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class InMemoryDataService implements InMemoryDbService{
 
-  public createDb(): {} | Observable<any> | Promise<any> {
-    const products = [
+  public createDb(): { [key: string] : ProductModel[]} {
+    const products  = [
       {
         imageUrl: 'https://content.rozetka.com.ua/goods/images/big_tile/215770075.jpg',
         description: 'Ноутбук Acer Aspire 7 A715-75G-569U (NH.Q87EU.004) Charcoal Black',
